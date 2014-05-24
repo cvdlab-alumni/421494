@@ -10,16 +10,10 @@ from largrid import *
 from mapper import *
 from sysml import *
 
-shape = [1,1,1]
-sizePatterns = [[10],[5],[0.2]]
-diagram = assemblyDiagramInit(shape)(sizePatterns)
-print "\n diagram =",diagram
-#VIEW((STRUCT(MKPOLS(diagram))))
-
 
 DRAW = COMP([VIEW,STRUCT,MKPOLS])
 
-#basis construction
+#basis construction 10.1x5.3x3
 master = assemblyDiagramInit([9,5,2])([[0.3,2.8,0.2,1.8,0.2,2.3,0.2,2,0.3],[0.3,1.2,0.2,3.3,.3],[.3,2.7]])
 V,CV = master
 hpc = SKEL_1(STRUCT(MKPOLS(master)))
@@ -47,7 +41,7 @@ hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,2)
 
 toRemove = [81]
 master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
-DRAW(master)
+#DRAW(master)
  
 #porta2
 toMerge = 54
@@ -58,7 +52,7 @@ V#IEW(hpc)
 
 toRemove = [85]
 master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
-DRAW(master)
+#DRAW(master)
 
 #porta3
 diagram = assemblyDiagramInit([3,1,2])([[0.9,1,0.9],[0.2],[2.1,0.6]])
@@ -69,7 +63,7 @@ hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,2)
 #VIEW(hpc)
 toRemove = [89]
 master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
-DRAW(master)
+#DRAW(master)
 
 #porta4
 diagram = assemblyDiagramInit([3,1,2])([[0.4,1,0.4],[0.2],[2.1,0.6]])
@@ -80,7 +74,7 @@ hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,2)
 #VIEW(hpc)
 toRemove = [93]
 master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
-DRAW(master)
+#DRAW(master)
 
 #porta5
 diagram = assemblyDiagramInit([3,1,2])([[0.65,1,0.65],[0.2],[2.1,0.6]])
@@ -102,7 +96,7 @@ hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,2)
 #VIEW(hpc)
 toRemove = [103,109]
 master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
-DRAW(master)
+#DRAW(master)
 
 #finestra2
 diagram = assemblyDiagramInit([5,1,3])([[0.4,0.7,0.1,0.7,0.4],[0.3],[0.8,1.5,0.4]])
@@ -113,7 +107,7 @@ hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,2)
 #VIEW(hpc)
 toRemove = [115,121]
 master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
-DRAW(master)
+#DRAW(master)
 
 #finestra2
 diagram = assemblyDiagramInit([3,1,3])([[0.5,1,0.5],[0.3],[0.8,1.5,0.4]])
@@ -124,7 +118,7 @@ hpc = cellNumbering (master,hpc)(range(len(master[1])),GREEN,2)
 #VIEW(hpc)
 toRemove = [127]
 master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
-DRAW(master)
+#DRAW(master)
 
 #finestra3
 diagram = assemblyDiagramInit([1,5,3])([[0.3],[1.15,0.9,0.2,0.9,1.15],[0.8,1.5,0.4]])
@@ -135,7 +129,7 @@ hpc = cellNumbering (master,hpc)(range(len(master[1])),GREEN,2)
 #VIEW(hpc)
 toRemove = [134,140]
 master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
-DRAW(master)
+#DRAW(master)
 
 
 #porta6
@@ -146,5 +140,16 @@ hpc = SKEL_1(STRUCT(MKPOLS(master)))
 hpc = cellNumbering (master,hpc)(range(len(master[1])),RED,2)
 #VIEW(hpc)
 toRemove = [144]
+master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
+#DRAW(master)
+
+#porta7B
+diagram = assemblyDiagramInit([3,1,2])([[0.5,1,0.5],[0.3],[2.1,0.6]])
+toMerge = 60
+master = diagram2cell(diagram,master,toMerge)
+hpc = SKEL_1(STRUCT(MKPOLS(master)))
+hpc = cellNumbering (master,hpc)(range(len(master[1])),CYAN,2)
+#VIEW(hpc)
+toRemove = [148]
 master = master[0], [cell for k,cell in enumerate(master[1]) if not (k in toRemove)]
 DRAW(master)
