@@ -601,7 +601,14 @@ function make_wall(geom,a_hole_x, b_hole_y,h2,x_hole, y_hole, z_hole,texture_wal
 		lampBath.position.set(5,8.8,3.7);
 		lamps.add(lampBath);
 		lamps.add(pl5);
-			
+		
+		pl6 = make_plug();
+		pl6.position.set(4.012,1.1,1.2);
+		lampCorridoio = make_lamp(0.2,pl6);
+		lampCorridoio.position.set(5,4,3.7);
+		lamps.add(lampCorridoio);
+		lamps.add(pl6);
+		
 		return lamps;
 	 }
 	 function make_xDoors(){

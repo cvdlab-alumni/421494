@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
  <head> 
-  <title>GC-FinalProj 421494</title> 
+  <title>GrafComp-FinalProj 421494</title> 
   <style>
     body{
       margin: 0;
@@ -56,9 +56,14 @@
 	  camera.up = new THREE.Vector3(0,0,1);
       camera.lookAt(scene.position);
       
-	  var planeGeometry = new THREE.PlaneGeometry(30,25);
-      var planeMaterial =  new THREE.MeshLambertMaterial({color: 0xffffff});
-      var plane = new THREE.Mesh(planeGeometry,planeMaterial);
+	  texture = THREE.ImageUtils.loadTexture( "textures/base.jpg" );
+	  texture.wrapS = THREE.RepeatWrapping; 
+	  texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set( 1,1 ); 
+	  material = new THREE.MeshLambertMaterial({ map : texture });
+	  plane = new THREE.Mesh(new THREE.PlaneGeometry(25, 25, 1, 1), material);
+	  plane.side = THREE.DoubleSide;
+	  plane.position.set(5,5,0);
 	  var ambiColor = "#0c0c0c";
       var ambientLight = new THREE.AmbientLight(ambiColor);
       scene.add(ambientLight);
