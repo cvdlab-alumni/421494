@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html>
+ <head> 
+  <title>GC-FinalProj 421494</title> 
+  <style>
+    body{
+      margin: 0;
+      overflow: hidden;
+    }
+	
+  </style> 
+  </head>
+  <body>
+  <!-- JavaScript libraries -->
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/stats.js/r11/Stats.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+  <script src="assets/libs/TrackballControls.js"></script>
+  <script src="assets/libs/tween.min.js"></script>
+
+  <script type="text/javascript" src="assets/libs/OBJLoader.js"></script> 
+  <script type="text/javascript" src="assets/libs/MTLLoader.js"></script> 
+  <script type="text/javascript" src="assets/libs/OBJMTLLoader.js"></script>
+  <script type="text/javascript" src="assets/libs/ThreeCSG.js"></script>
+  <script type="text/javascript" src="js/functions.js"></script>
+  <script type="text/javascript" src="js/load.js"></script>
+  <!-- Javascript code that runs our Three.js examples --> 
+  <script>
+    // once everything is loaded, we run our Three.js stuff.
+    $(function () {
+
+      var stats = initStats();
+
+      // create a scene, that will hold all our elements such as objects, cameras and lights.
+      var scene = new THREE.Scene();
+
+      // create a camera, which defines where we're looking at.
+      var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+      // create trackball controls
+      var trackballControls = new THREE.TrackballControls(camera);
+
+      // create a render and set the size
+      var webGLRenderer = new THREE.WebGLRenderer();
+      webGLRenderer.setClearColor(new THREE.Color(0xaaaaff, 1.0));
+      webGLRenderer.setSize(window.innerWidth, window.innerHeight);
+      webGLRenderer.shadowMapEnabled = true;
+
+
+      var axisHelper = new THREE.AxisHelper(5);
+      scene.add(axisHelper);
+      // position and point the camera to the center of the scene
+      camera.position.set(3,5,10);
+	  camera.up = new THREE.Vector3(0,0,1);
+      camera.lookAt(scene.position);
+      
+	  var planeGeometry = new THREE.PlaneGeometry(30,25);
+      var planeMaterial =  new THREE.MeshLambertMaterial({color: 0xffffff});
+      var plane = new THREE.Mesh(planeGeometry,planeMaterial);
+	  var ambiColor = "#0c0c0c";
+      var ambientLight = new THREE.AmbientLight(ambiColor);
+      scene.add(ambientLight);
+
+	  // rotate and position the plane
+	  plane.rotation.x=-0.5*Math.PI;
+	  plane.position.set(0,0,0);
+	  plane.rotation.x=0;
+	  scene.add(plane);
+	  
+	  
+	  var lightTarget1 = new THREE.Object3D();
+	  lightTarget1.position.set(0,0,-20);
+	  
+	  var lightTarget2 = new THREE.Object3D();
+	  lightTarget2.position.set(8,14,-20);
+	  
+      // add spotlight for the shadows
+      var spotLight = new THREE.SpotLight(0xffffff);
+      spotLight.position.set(-2, -2, 30);
+      spotLight.intensity = 0.8;
+	  //spotLight.target=lightTarget1;
+      scene.add(spotLight);
+
+	  
+	  // add spotlight for the shadows
+      var spotLight2 = new THREE.SpotLight(0xffffff);
+      spotLight2.position.set(7, 11, 30);
+      spotLight2.intensity = 0.8;
+	  //spotLight2.target=lightTarget2;
+      scene.add(spotLight2);
+	  
+	  
+      var projector = new THREE.Projector();
+      document.addEventListener('mousedown', onDocumentMouseDown, false);
+	  
+	  
+  	  
+      // add the output of the renderer to the html element
+      $('body').append(webGLRenderer.domElement);
+
+	  lista=[];
+	  	  
+	  apartment = new THREE.Object3D();
+	  
+	  apartment.add(make_lamps());
+	  
+	  apartment.add(make_externalWalls());
+	  
+	  apartment.add(make_internalWalls());
+	  
+	  apartment.add(make_blindata());
+	  
+	  apartment.add(make_pavimento());
+	  
+	  apartment.add(make_allDoors());
+	  
+	  apartment.add(make_all_windows());
+	  
+	  apartment.add(make_frames());
+	  scene.add(apartment);
+      var step = 0;
+
+      // setup the control gui
+      var controls = new function () {};
+
+      var gui = new dat.GUI();
+      var mesh;
+
+	  
+	  
+      var loader = new THREE.OBJLoader();
+      loader.load('assets/models/casa', function (obj) {
+
+        global_o = obj;
+
+         var material = new THREE.MeshLambertMaterial({color: 0x993300});
+         material.side = THREE.DoubleSide;
+         obj.children[0].material = material;
+         mesh = obj.children[0];
+
+        var multiMaterial = [
+          new THREE.MeshLambertMaterial({color: 0xaaaaaa, side: THREE.DoubleSide, shading: THREE.FlatShading}),
+          new THREE.MeshBasicMaterial({wireframe: true, overdraw: true, color: 0xffffff, side: THREE.DoubleSide})
+          ];
+
+//        mesh = THREE.SceneUtils.createMultiMaterialObject(obj.children[0].geometry, multiMaterial);
+         mesh.rotation.z=Math.PI/2;
+		 mesh.position.x=6.3;
+//		 mesh.scale.set(2,2,1);
+        apartment.add(mesh);
+      });
+//	  apartment.scale.set(1.5,1.5,1);
+
+		apartment = loadingObjects(apartment);
+		
+//
+
+//
+      render();
+
+      function render() {
+        stats.update();
+        trackballControls.update();
+		TWEEN.update();
+        // render using requestAnimationFrame
+        requestAnimationFrame(render);
+        webGLRenderer.render(scene, camera);
+      }
+	  
+
+      function onDocumentMouseDown (event) {
+        event.preventDefault();
+
+        // map viewport coordinates in ([-1,1], [-1,1], 0.5)
+        var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
+        projector.unprojectVector(vector, camera);
+
+        var raycaster = new THREE.Raycaster(camera.position, 
+          vector.sub(camera.position).normalize());
+		
+        var intersects = raycaster.intersectObjects(lista);
+		
+        if (intersects.length > 0) {
+		  intersects[0].object.interact(); 
+          
+        }
+      }	  
+		
+      function initStats() {
+        var stats = new Stats();
+        stats.setMode(0); // 0: fps, 1: ms
+        $('body').append(stats.domElement);
+        return stats;
+      }
+    });
+  </script>  
+ </body>
+</html>
