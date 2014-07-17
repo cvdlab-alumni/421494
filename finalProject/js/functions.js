@@ -358,9 +358,9 @@ function make_wall(geom,a_hole_x, b_hole_y,h2,x_hole, y_hole, z_hole,texture_wal
 	  
 	  cube.interact=function(){
 		if(!cube.open){
-			soundRadio = new Sound(['sound/Kalimba.mp3'], 10, 1);
+			soundRadio = new Sound(['sound/Door.mp3'], 10, 1);
 			soundRadio.play();
-			new TWEEN.Tween(cube.parent.rotation).to({z: -Math.PI/2},1500).start();
+			new TWEEN.Tween(cube.parent.rotation).to({z: -Math.PI/2},5000).start();
 			cube.open=true;
 		} else {
 			new TWEEN.Tween(cube.parent.rotation).to({z: 0},1500).start();
@@ -658,4 +658,119 @@ function make_wall(geom,a_hole_x, b_hole_y,h2,x_hole, y_hole, z_hole,texture_wal
 		frames.add(frame2);
 		frames.add(frame1);
 		return frames;
+	 }
+	 
+	 function make_balcony(){
+		balcony = new THREE.Object3D();
+		texture = THREE.ImageUtils.loadTexture( "textures/balc.jpg" );
+		texture.wrapS = THREE.RepeatWrapping; 
+		texture.wrapT = THREE.RepeatWrapping;
+		texture.repeat.set( 1,1 ); 
+		material = new THREE.MeshLambertMaterial({ map : texture });
+		plane2 = new THREE.Mesh(new THREE.BoxGeometry(1.98,10,0.1), material);
+		plane2.side = THREE.DoubleSide;
+//		plane2.position.set = (-3,10.05,-0.5);
+		
+		var wall_balc_geom = new THREE.BoxGeometry( 2, 10.1, 0.8 );
+		var wall_balc = make_wall(wall_balc_geom,1.8,9.9,0.8,-0.1,0,0,'base3.png');
+		wall_balc.rotation.z=Math.PI;
+		wall_balc.position.set(0,0,0.4);
+		balcony.add(plane2);
+		balcony.add(wall_balc);
+//		wall_balc.visible=false;
+		balcony.position.set(-1,5.05,0.1);
+
+		return balcony;
+	 }
+	 
+	 function make_tenda(){
+		var tenda = new THREE.Object3D();
+		
+		var Cyl1G = new THREE.CylinderGeometry( 0.01, 0.01, 4, 32 ); 
+		var mat1 = new THREE.MeshBasicMaterial( {color: 0x000000} ); 
+		var trav = new THREE.Mesh( Cyl1G, mat1 );
+//		trav.position.set(0,0,0);
+//		trav.rotation.x=Math.PI/2;
+
+		var Cyl3G = new THREE.CylinderGeometry( 0.01, 0.01, 3, 32 );
+		var mat3 = new THREE.MeshBasicMaterial( {color: 0xFFFFFF} );
+		var trav3 = new THREE.Mesh( Cyl3G, mat3 );
+		
+		var textureTenda = THREE.ImageUtils.loadTexture( "textures/tenda.jpg" );
+		var Cyl2G = new THREE.CylinderGeometry( 0.1, 0.1, 3, 32 ); 
+		var mat2 = new THREE.MeshBasicMaterial( {map : textureTenda} ); 
+		var trav2 = new THREE.Mesh( Cyl2G, mat2 );
+		
+		hook = new THREE.Object3D();
+		
+		plane3 = new THREE.Mesh(new THREE.BoxGeometry(2,3,0.01), mat2);
+		plane3.rotation.y=-Math.PI/12;
+		plane3.position.set(-0.1,0,0.08);
+		
+		trav.add(plane3);
+		trav.plane3=plane3;
+		trav.plane3.scale.set(0.1,1,1);
+		trav2.esp=false;
+		trav.add(trav2);
+		tenda.add(trav);
+
+		tenda.position.set(-0.2,8,2.9);
+
+// target plane3.position.set(-0.98,0,-0.16);
+		
+		lista.push(trav2);
+		trav2.interact=function(){
+		if (!trav2.esp){
+		  trav2.esp=true;
+		  new TWEEN.Tween(trav2.parent.plane3.scale).to({ x: 1},2000).start();
+		  new TWEEN.Tween(trav2.parent.plane3.position).to({ x : -0.98, y: 0, z: -0.16},2000).start();
+		  new TWEEN.Tween(trav2.rotation).to({ y: -Math.PI/2},2000).start();
+		} else {
+		  trav2.esp=false;
+		  new TWEEN.Tween(trav2.parent.plane3.scale).to({ x: 0.1},2000).start();
+		  new TWEEN.Tween(trav2.parent.plane3.position).to({ x : -0.1, y: 0, z: 0.08},2000).start();
+		  new TWEEN.Tween(trav2.rotation).to({ y: 0},2000).start();
+		}
+	  }
+		
+		return tenda;
+
+	 }
+	 
+	 function make_tv(){
+		var tvG = new THREE.BoxGeometry( 1, 0.01, 0.58, 32 ); 
+		var mat1 = new THREE.MeshBasicMaterial( {color: 0x000000} ); 
+		var tvN = new THREE.Mesh( tvG, mat1 );
+//		trav.position.set(0,0,0);
+
+		var tvG = new THREE.BoxGeometry( 1, 0.01, 0.58, 32 ); 
+		var textureTv = THREE.ImageUtils.loadTexture( "textures/signal.jpg" );
+		var mat2 = new THREE.MeshBasicMaterial( {map : textureTv} ); 
+		var tvC = new THREE.Mesh( tvG, mat2 );
+		tvC.visible=false;
+		
+		tvN.add(tvC);
+		tvN.tvC=tvC;
+		soundtv = new Sound(['sound/nosignal.mp3'], 10, 1);
+		tvN.add(soundtv);
+		tvN.vis=false;
+		lista.push(tvN);
+		
+		tvN.interact=function(){
+		if (!tvN.vis){
+		  soundtv = new Sound(['sound/nosignal.mp3'], 10, 1);
+		  soundtv.play();
+		  tvN.visible=false;
+		  tvN.tvC.visible=true;
+		  tvN.vis=true;
+		} else {
+		  soundtv.pause();
+		  tvN.visible=true;
+		  tvN.vis=false;
+		  tvN.tvC.visible=false;
+		}
+	  }
+	  tvN.position.set(1.55,0.72,1.09);
+	  tvN.rotation.z=Math.PI;
+	  return tvN;
 	 }

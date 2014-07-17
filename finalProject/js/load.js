@@ -1,4 +1,4 @@
-function importObj (obj) {
+function importObject(obj) {
 	var pivot = new THREE.Object3D(); 
   	loader1 = new THREE.OBJLoader();
     loader1.load(obj, function (obj) {
@@ -140,7 +140,7 @@ function loadingObjects(apartment){
 	mebelHook.rotation.z=Math.PI;
 	mebelHook.position.set(1.5,0.6,0.7);
 	
-	var fireside = importObj('models/livRoom/fireside.obj');
+	var fireside = importObject('models/livRoom/fireside.obj');
 	var firesideHook = new THREE.Object3D();
 	fireside.scale.set(0.25,0.25,0.25);
 	fireside.rotation.x=Math.PI/2;
@@ -156,7 +156,7 @@ function loadingObjects(apartment){
 	woodTable.rotation.y=Math.PI;
 	woodTableHook.add(woodTable);
 	woodTableHook.position.set(2.2,1.8,0.5);
-	
+	//
 	var tv = loading('models/livRoom/TV.obj','models/livRoom/TV.mtl');	
 	var tvHook = new THREE.Object3D();
 	tv.scale.set(0.5,0.5,0.5);
@@ -164,7 +164,7 @@ function loadingObjects(apartment){
 	tv.rotation.y=Math.PI;
 	tvHook.add(tv);
 	tvHook.position.set(1.55,0.7,0.71);
-	
+	//
 	var kit = loading('models/kitchen/kitchen.obj','models/kitchen/kitchen.mtl');
 	var kitchen = new THREE.Object3D();
 	kit.rotation.x=Math.PI/2;
@@ -189,7 +189,7 @@ function loadingObjects(apartment){
 	CDrackHook.add(CDrack);
 	CDrackHook.position.set(4.3,3.6,0.3);
 	
-	var agg = importObj('models/corridoio/agg.obj');
+	var agg = importObject('models/corridoio/agg.obj');
 	var aggHook = new THREE.Object3D();
 	agg.scale.set(0.01,0.01,0.01);
 	agg.rotation.x=Math.PI/2;
@@ -227,8 +227,26 @@ function loadingObjects(apartment){
 		}
 	  }
 	
+	var umbrella = loading('models/balcony/umbrella.obj','models/balcony/umbrella.mtl');
+	var umbrellaHook = new THREE.Object3D();
+	umbrella.scale.set(0.016,0.013,0.006);
+	umbrella.rotation.x=Math.PI/2;
+	umbrella.rotation.y=-Math.PI/2;
+	umbrella.castShadow=true;
+	umbrellaHook.add(umbrella);
+	umbrellaHook.position.set(-0.5,2,0.4);
 	
 	
+	var deckChair = loading('models/balcony/deckChair.obj','models/balcony/deckChair.mtl');
+	var deckChairHook = new THREE.Object3D();
+	deckChair.scale.set(0.016,0.016,0.006);
+	deckChair.rotation.x=Math.PI/2;
+	deckChair.rotation.y=-Math.PI;
+	deckChairHook.add(deckChair);
+	deckChairHook.position.set(-1.2,0.5,0.4);
+	
+	apartment.add(deckChairHook);
+	apartment.add(umbrellaHook);
 	apartment.add(radioHook);
 	apartment.add(aggHook);
 	apartment.add(CDrackHook);
